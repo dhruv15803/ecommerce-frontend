@@ -15,6 +15,9 @@ const CartCard = (props) => {
             <p>{props.cartItemQty}</p>
             <button onClick={()=>props.incrementQty(props.index)} className='border-2 p-2 rounded-full border-black hover:bg-black hover:text-white hover:duration-300'>+</button>
         </div>
+        <div>
+            <button onClick={()=>props.deleteCartItem(props._id)} className='border-2 my-2 rounded-lg p-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white hover:duration-300'>Delete</button>
+        </div>
     </div>
     </>
   )

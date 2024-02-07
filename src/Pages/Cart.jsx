@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext, backendUrl } from "../App";
 import CartCard from "../Components/CartCard";
 import axios from "axios";
@@ -6,6 +6,7 @@ import axios from "axios";
 const Cart = () => {
   const { cart, setCart } = useContext(LoginContext);
   console.log(cart);
+  const [totalPrice, setTotalPrice] = useState(null);
 
   const incrementQty = async (index) => {
     try {
@@ -21,7 +22,6 @@ const Cart = () => {
           return item;
         }
       });
-      setCart(newCart);
       const response = await axios.patch(
         `${backendUrl}/cart/increment`,
         {
@@ -29,6 +29,7 @@ const Cart = () => {
         },
         { withCredentials: true }
       );
+      setCart(newCart);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -48,10 +49,14 @@ const Cart = () => {
         return item;
       }
     });
+    const response = await axios.patch(
+      `${backendUrl}/cart/decrement`,
+      {
+        _id,
+      },
+      { withCredentials: true }
+    );
     setCart(newCart);
-    const response = await axios.patch(`${backendUrl}/cart/decrement`,{
-        _id
-    },{withCredentials:true});
     console.log(response);
   };
 
@@ -67,6 +72,58 @@ const Cart = () => {
       console.log(error);
     }
   };
+
+  const getUserCartItems = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/cart/getItems`, {
+        withCredentials: true,
+      });
+      if (response?.data?.success) {
+        setCart(response.data.cartItems);
+        console.log(response.data.cartItems);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteCartItem = async (_id) => {
+    try {
+      const newCartItems = cart.filter((item) => item._id !== _id);
+      const response = await axios.post(
+        `${backendUrl}/cart/delete`,
+        {
+          _id,
+        },
+        { withCredentials: true }
+      );
+      console.log(response);
+      setCart(newCartItems);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTotalPrice = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/cart/getTotalPrice`, {
+        withCredentials: true,
+      });
+      if (response?.data?.success) {
+        setTotalPrice(response.data.totalPrice);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTotalPrice();
+  },[cart]);
+
+  useEffect(() => {
+    getUserCartItems();
+  }, []);
 
   return (
     <>
@@ -84,6 +141,7 @@ const Cart = () => {
                 cartUser={item.cartUser}
                 incrementQty={incrementQty}
                 decrementQty={decrementQty}
+                deleteCartItem={deleteCartItem}
                 key={i}
                 _id={item._id}
                 index={i}
@@ -92,9 +150,19 @@ const Cart = () => {
           })}
         </div>
         {cart.length !== 0 && (
-          <div className="flex justify-center">
-            <button onClick={clearCart}>Clear cart</button>
+        <>
+          <div className="my-2 font-bold text-xl mx-4">
+            Total price: Rs {totalPrice}
           </div>
+            <div className="flex justify-center">
+            <button
+              className="border-2 rounded-lg p-2 border-black hover:bg-black hover:text-white hover:duration-300 "
+              onClick={clearCart}
+            >
+              Clear cart
+            </button>
+          </div>
+        </>
         )}
       </div>
     </>

@@ -6,11 +6,10 @@ import { LoginContext, backendUrl } from "../App";
 
 const ProductUserCard = (props) => {
   const [isShowDescription, setIsShowDescription] = useState(false);
-  const {isLoggedIn} = useContext(LoginContext);
+  const {isLoggedIn,loggedInUser} = useContext(LoginContext);
 
   const addToCart = async (_id) => {
-    try {
-        
+    try { 
       const cartItem = props.cart.find(item=>item.cartProductId===_id);
       if(cartItem){
         const newCart = props.cart.map((item,i)=>{
@@ -33,6 +32,7 @@ const ProductUserCard = (props) => {
               cartItemPrice: props.productPrice,
               cartItemQty: 1,
               cartProductId: _id,
+              cartUser:loggedInUser._id,
             },
           ]);
       }
