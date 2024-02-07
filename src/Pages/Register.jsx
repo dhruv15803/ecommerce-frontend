@@ -9,7 +9,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [avatar, setAvatar] = useState("");
-
+  const [registerMsg,setRegisterMsg] = useState("");
 
   console.log(avatar);
   const navigate = useNavigate();
@@ -33,12 +33,16 @@ const Register = () => {
         }
       );
       console.log(response);
-      if(response.data.success){
-        setTimeout(()=>{
-            navigate('/login');
-        },3000)
-      }
+      setRegisterMsg("successfully registered user!");
+      setTimeout(()=>{
+        setRegisterMsg("");
+        navigate('/login');
+      },2000);
     } catch (error) {
+      setRegisterMsg("Please enter all the required fields");
+      setTimeout(()=>{
+        setRegisterMsg("");
+      },3000);
       console.log(error);
     }
   };
@@ -80,6 +84,9 @@ const Register = () => {
             id="password"
             placeholder="Enter password"
           />
+          <div className="flex justify-center my-2 text-blue-500">
+            {registerMsg}
+          </div>
           <button className="border-2 rounded-lg w-fit mx-auto px-4 py-2 border-black hover:bg-black hover:text-white hover:duration-300">
             register
           </button>

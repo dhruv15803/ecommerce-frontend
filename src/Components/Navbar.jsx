@@ -1,12 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link,NavLink } from "react-router-dom";
 import { LoginContext, backendUrl } from "../App";
 import { useContext } from "react";
 import axios from "axios";
+import { GiHamburgerMenu } from "react-icons/gi";
+import Cart from "../Pages/Cart";
 
 const Navbar = () => {
-  const { isLoggedIn, setIsLoggedIn, setLoggedInUser, loggedInUser,isUserAdmin } =
-    useContext(LoginContext);
+  const { isLoggedIn, setIsLoggedIn, setLoggedInUser, loggedInUser,isUserAdmin } = useContext(LoginContext);
+
+  const [isShowHamburger,setIsShowHamburger] = useState(false);
+  const [categories,setCategories] = useState([]);
+
+  const getAllCategories = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/category/getAll`);
+      if (response.data.success) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllCategories();
+  }, [categories]);
 
   const logoutUser = async () => {
     try {
@@ -29,13 +47,13 @@ const Navbar = () => {
           <Link to="/">Shopify</Link>
         </div>
         {!isLoggedIn && (
-          <div className="flex items-center gap-2 absolute right-5">
+          <div className="flex items-center gap-2 absolute right-10">
             <Link to="/login">
               <button>Login</button>
             </Link>
-            <Link to="/register">
+            {/* <Link to="/register">
               <button>Register</button>
-            </Link>
+            </Link> */}
           </div>
         )}
         <div className="flex items-center gap-4">
@@ -58,8 +76,21 @@ const Navbar = () => {
             <button onClick={logoutUser}>Logout</button>
           </div>
         )}
+        <div className="flex items-center">
+          <button onClick={()=>setIsShowHamburger(!isShowHamburger)} className="text-xl">
+            <GiHamburgerMenu/>
+          </button>
+        </div>
         </div>
       </nav>
+      {isShowHamburger && <div className="flex flex-col gap-1  bg-gray-400 text-white">
+        <div className="border-2 b-2 p-4">
+          <NavLink to='/cart' onClick={()=>setIsShowHamburger(false)} className={({isActive})=>isActive ? 'text-gray-200':'text-white'}>cart</NavLink>
+        </div>
+        {categories?.map((item,i) => {
+          return <div onClick={()=>setIsShowHamburger(false)} className="border-b-2 p-4" key={i}><NavLink to={`/products/${item.categoryName}`} className={({isActive})=>isActive ? 'text-gray-200':'text-white'}>{item.categoryName}</NavLink></div> 
+        })}
+      </div>}
     </>
   );
 };

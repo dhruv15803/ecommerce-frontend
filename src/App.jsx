@@ -12,15 +12,14 @@ import Profile from "./Pages/Profile";
 import Admin from "./Pages/Admin";
 import AdminLayout from "./Layouts/AdminLayout";
 import AdminCategory from "./Pages/AdminCategory";
+import Products from "./Pages/Products";
+import Cart from "./Pages/Cart";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [isUserAdmin,setIsUserAdmin] = useState(false);
-
-
-  console.log(isLoggedIn);
-  console.log(loggedInUser);
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [cart, setCart] = useState([]);
 
   const getLoggedInUser = async () => {
     try {
@@ -35,26 +34,54 @@ function App() {
     }
   };
 
+  const getUserCartItems = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/cart/getItems`, {
+        withCredentials: true,
+      });
+      if (response?.data?.success) {
+        setCart(response.data.cartItems);
+        console.log(response.data.cartItems);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
+    getUserCartItems();
     getLoggedInUser();
   }, []);
 
   return (
     <>
-      <LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn,setLoggedInUser,loggedInUser,isUserAdmin,setIsUserAdmin}}>
+      <LoginContext.Provider
+        value={{
+          isLoggedIn,
+          setIsLoggedIn,
+          setLoggedInUser,
+          loggedInUser,
+          isUserAdmin,
+          setIsUserAdmin,
+          cart,
+          setCart,
+        }}
+      >
         <Router>
           <Routes>
-            <Route path="/" element={<Layout/>}>
+            <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route
-                path="login"
-                element={<Login/>}
-              />
+              <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-              <Route path="profile" element={<Profile/>}/>
-              <Route path="Admin" element={<AdminLayout/>}>
-                <Route index element={<Admin/>}/>
-                <Route path="category" element={<AdminCategory/>}/>
+              <Route path="profile" element={<Profile />} />
+              <Route path="cart" element={<Cart />}/>
+              <Route path="Admin" element={<AdminLayout />}>
+                <Route index element={<Admin />} />
+                <Route path="category" element={<AdminCategory />} />
+              </Route>
+              <Route path="products">
+                <Route path=":category" element={<Products />} />
               </Route>
             </Route>
           </Routes>

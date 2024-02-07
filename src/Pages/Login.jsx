@@ -4,6 +4,7 @@ import {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import {useContext} from 'react'
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -58,6 +59,9 @@ const Login = () => {
             id="password"
             placeholder="Enter password"
           />
+          <div className="flex justify-center my-2">
+            Don't have an account ?<Link to='/register' className="mx-1 text-blue-500">Click here</Link>
+          </div>
           <button className="border-2 rounded-lg w-fit mx-auto px-4 py-2 border-black hover:bg-black hover:text-white hover:duration-300">
             Login
           </button>
