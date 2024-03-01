@@ -48,6 +48,23 @@ function App() {
     }
   };
 
+  const [categories,setCategories] = useState([]);
+
+  const getAllCategories = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/category/getAll`);
+      if (response.data.success) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(()=>{
+    getAllCategories();
+  },[]);
 
   useEffect(() => {
     getUserCartItems();
@@ -70,7 +87,7 @@ function App() {
       >
         <Router>
           <Routes>
-            <Route path="/" element={<Layout cart={cart}/>}>
+            <Route path="/" element={<Layout cart={cart} categories={categories}/>}>
               <Route index element={<Home />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />

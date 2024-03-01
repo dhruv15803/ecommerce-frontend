@@ -7,25 +7,10 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { FaShoppingCart } from "react-icons/fa";
 
 
-const Navbar = ({cart}) => {
+const Navbar = ({cart,categories}) => {
   const { isLoggedIn, setIsLoggedIn, setLoggedInUser, loggedInUser,isUserAdmin } = useContext(LoginContext);
 
   const [isShowHamburger,setIsShowHamburger] = useState(false);
-  const [categories,setCategories] = useState([]);
-
-  const getAllCategories = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/category/getAll`);
-      if (response.data.success) {
-        setCategories(response.data.categories);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getAllCategories();
-  }, [categories]);
 
   const logoutUser = async () => {
     try {
