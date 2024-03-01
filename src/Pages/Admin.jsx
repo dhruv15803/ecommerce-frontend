@@ -119,6 +119,7 @@ const Admin = () => {
     }
   };
 
+
   const clearProducts = async () => {
     try {
       const response = await axios.delete(`${backendUrl}/product/deleteAll`, {
@@ -161,7 +162,7 @@ const Admin = () => {
       const productItem = products.find(
         (product) => product.productId === productId
       );
-      setProductImg("");
+      setProductImg("");  
       setProductTitle(productItem.productTitle);
       setProductDescription(productItem.productDescription);
       setProductPrice(productItem.productPrice);
@@ -181,6 +182,8 @@ const Admin = () => {
       console.log(error);
     }
   };
+
+  console.log(products);
 
   if (isLoading) {
     return (
@@ -277,6 +280,7 @@ const Admin = () => {
             return (
               <ProductCard
                 key={i}
+                category={item.category}
                 productId={item.productId}
                 productImg={item.productImg}
                 productTitle={item.productTitle}

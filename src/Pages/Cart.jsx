@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { LoginContext, backendUrl } from "../App";
 import CartCard from "../Components/CartCard";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { cart, setCart } = useContext(LoginContext);
@@ -125,11 +126,14 @@ const Cart = () => {
     getUserCartItems();
   }, []);
 
+
+
+
   return (
     <>
       <div className="flex flex-col m-4">
         <h1 className="text-2xl font-bold">Cart</h1>
-        <div className="flex flex-col mx-4 my-2 p-2 gap-2">
+        {cart.length!==0 ?         <div className="flex flex-col mx-4 my-2 p-2 gap-2">
           {cart?.map((item, i) => {
             console.log(item);
             return (
@@ -148,7 +152,12 @@ const Cart = () => {
               />
             );
           })}
+        </div> :  <>
+        <div className="text-lg flex gap-2">
+          <p>Cart is empty.</p>
+          <Link className="text-red-500" to='/'>Click here to shop</Link>
         </div>
+        </>}
         {cart.length !== 0 && (
         <>
           <div className="my-2 font-bold text-xl mx-4">

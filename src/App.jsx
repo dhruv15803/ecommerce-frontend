@@ -70,7 +70,7 @@ function App() {
       >
         <Router>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout cart={cart}/>}>
               <Route index element={<Home />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />

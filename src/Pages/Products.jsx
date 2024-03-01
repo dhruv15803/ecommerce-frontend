@@ -32,6 +32,10 @@ const Products = () => {
         </h1>
       </div>
       <div className="flex mx-2 flex-wrap gap-2 p-2 justify-center">
+        {products.length===0 && 
+        <div className="text-red-500 text-xl font-bold">
+          No products available in this category
+        </div>}
         {products.map((item, i) => {
           return (
             <ProductUserCard
