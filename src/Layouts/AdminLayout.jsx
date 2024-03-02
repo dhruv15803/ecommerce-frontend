@@ -8,6 +8,7 @@ const AdminLayout = () => {
     <div className='flex my-8 mx-4 gap-4 border-b-2 border-black p-2'>
         <NavLink end to=''  className={({isActive})=>isActive?'text-black':'text-gray-400'} ><button>products</button></NavLink>
         <NavLink  to='category' className={({isActive})=>isActive?'text-black':'text-gray-400'} ><button>category</button></NavLink>
+        <NavLink  to='subCategory' className={({isActive})=> isActive ? 'text-black' : 'text-gray-400'}><button>sub categories</button></NavLink>
     </div>
     <Outlet/>
     </>

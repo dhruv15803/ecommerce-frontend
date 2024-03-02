@@ -14,11 +14,13 @@ import AdminLayout from "./Layouts/AdminLayout";
 import AdminCategory from "./Pages/AdminCategory";
 import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
+import AdminSubCategory from "./Pages/AdminSubCategory";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [categories,setCategories] = useState([]);
   const [cart, setCart] = useState([]);
 
   const getLoggedInUser = async () => {
@@ -48,7 +50,6 @@ function App() {
     }
   };
 
-  const [categories,setCategories] = useState([]);
 
   const getAllCategories = async () => {
     try {
@@ -83,6 +84,7 @@ function App() {
           setIsUserAdmin,
           cart,
           setCart,
+          categories
         }}
       >
         <Router>
@@ -96,6 +98,7 @@ function App() {
               <Route path="Admin" element={<AdminLayout />}>
                 <Route index element={<Admin />} />
                 <Route path="category" element={<AdminCategory />} />
+                <Route path="subCategory" element={<AdminSubCategory/>}/>
               </Route>
               <Route path="products">
                 <Route path=":category" element={<Products />} />
