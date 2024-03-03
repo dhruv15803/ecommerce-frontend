@@ -6,6 +6,8 @@ import ProductCard from "../Components/ProductCard";
 
 const Admin = () => {
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [subCategory, setSubCategory] = useState("");
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [productImg, setProductImg] = useState("");
@@ -42,10 +44,6 @@ const Admin = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getAllCategories();
-    getAllProducts();
-  }, []);
 
   const addProduct = async (e) => {
     try {
@@ -88,6 +86,7 @@ const Admin = () => {
             productPrice,
             productStock,
             productCategory: category,
+            productSubCategory:subCategory,
           },
           {
             withCredentials: true,
@@ -118,7 +117,6 @@ const Admin = () => {
       console.log(error);
     }
   };
-
 
   const clearProducts = async () => {
     try {
@@ -162,7 +160,7 @@ const Admin = () => {
       const productItem = products.find(
         (product) => product.productId === productId
       );
-      setProductImg("");  
+      setProductImg("");
       setProductTitle(productItem.productTitle);
       setProductDescription(productItem.productDescription);
       setProductPrice(productItem.productPrice);
@@ -177,11 +175,37 @@ const Admin = () => {
       response.data.success
         ? setCategory(response.data.category.categoryName)
         : setCategory("");
-        console.log(response.data.category.categoryName);
+      console.log(response.data.category.categoryName);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getSubCategory = async () => {
+    try {
+      const response = await axios.post(
+        `${backendUrl}/category/getSubCategory`,
+        { categoryName: category },
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setSubCategories(response.data.category.subCategories);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+    getAllProducts();
+  }, []);
+
+  useEffect(() => {
+    getSubCategory();
+  }, [category]);
+
+  console.log(subCategory);
 
   console.log(products);
 
@@ -256,6 +280,25 @@ const Admin = () => {
               );
             })}
           </select>
+          {subCategories.length !== 0 && (
+            <select
+              value={subCategory}
+              onChange={(e) => setSubCategory(e.target.value)}
+              className="mx-4 border-2 p-2 rounded-lg"
+              name="subCategory"
+              id=""
+            >
+              {subCategories.map((item, i) => {
+                return (
+                  <>
+                    <option key={i} value={item.name}>
+                      {item.name}
+                    </option>
+                  </>
+                );
+              })}
+            </select>
+          )}
           <button className="border-2 rounded-lg border-black p-2 w-1/2 mx-auto my-4 hover:bg-black hover:text-white hover:duration-300">
             {isEdit ? "Edit product" : "Add product"}
           </button>

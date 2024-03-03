@@ -9,7 +9,7 @@ const Layout = ({cart,categories}) => {
     <>
     <Navbar cart={cart} categories={categories}/>
     <Outlet/>
-    <Footer/>
+    {/* <Footer/> */}
     </>
   )
 }
