@@ -5,10 +5,11 @@ import { LoginContext, backendUrl } from "../App";
 import ProductUserCard from "../Components/ProductUserCard";
 
 const Products = () => {
-  const { category } = useParams();
+  const { category} = useParams();
   const [products, setProducts] = useState([]);
   const [subCategories,setSubCategories] = useState([]);
   const { cart, setCart } = useContext(LoginContext);
+  const [subCategory,setSubCategory] = useState("");
 
   const getProductsByCategory = async () => {
     try {
@@ -36,12 +37,10 @@ const Products = () => {
     }
   };
 
-  useEffect(()=>{
-    getSubCategory();
-  },[])
-
+  
   useEffect(() => {
     getProductsByCategory();
+    getSubCategory();
   }, [category]);
 
   console.log(subCategories);
@@ -53,10 +52,10 @@ const Products = () => {
           {category[0].toUpperCase() + category.slice(1)}
         </h1>
       </div>
-      <div className="flex gap-2 m-2 p-2">
-        <NavLink end to='.' className={({isActive})=> isActive ? 'underline underline-offset-4 font-semibold text-xl ' : 'font-semibold text-xl'} >All</NavLink>
+      <div className="flex gap-4 m-2 p-2">
+        <button className={subCategory===""? 'underline underline-offset-4 text-xl' : 'text-xl'} onClick={()=>setSubCategory("")}>All</button>
         {subCategories.map((item,i)=>{
-          return <NavLink key={i} className={({isActive})=> isActive ? 'underline underline-offset-4 font-semibold text-xl ' : 'font-semibold text-xl'} to={item.name}>{item.name}</NavLink>
+          return <button className={subCategory===item.name ? 'underline underline-offset-4 text-xl' : 'text-xl'} onClick={()=>setSubCategory(item.name)} key={i} to={item.name}>{item.name}</button>
         })}
       </div>
       <div className="flex mx-2 flex-wrap gap-2 p-2 justify-center">
@@ -64,7 +63,13 @@ const Products = () => {
         <div className="text-red-500 text-xl font-bold">
           No products available in this category
         </div>}
-        {products.map((item, i) => {
+        {products.filter(item => {
+          if(subCategory!==""){
+            return item.subCategory===subCategory;
+          } else {
+            return item;
+          }
+        }).map((item, i) => {
           return (
             <ProductUserCard
               _id={item._id}

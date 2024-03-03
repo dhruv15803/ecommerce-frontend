@@ -60,6 +60,7 @@ const Admin = () => {
             newProductStock: productStock,
             newProductCategory: category,
             productId: editId,
+            newProductSubCategory:subCategory,
           },
           {
             withCredentials: true,
