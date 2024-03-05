@@ -41,6 +41,7 @@ const Products = () => {
   useEffect(() => {
     getProductsByCategory();
     getSubCategory();
+    setSubCategory("");
   }, [category]);
 
   console.log(subCategories);

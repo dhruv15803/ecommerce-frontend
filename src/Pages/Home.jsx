@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaLessThan } from "react-icons/fa";
 import { FaGreaterThan } from "react-icons/fa";
 import ProductCard from "../Components/ProductCard";
 import axios from "axios";
-import { backendUrl } from "../App";
+import { LoginContext, backendUrl } from "../App";
 import ProductUserCard from "../Components/ProductUserCard";
 
 const Home = () => {
@@ -11,6 +11,7 @@ const Home = () => {
   const homePageProductCategory = "men's clothing";
   const [currCarouselImg, setCurrCarouselImg] = useState(0);
   const numImages = 3;
+  const { cart, setCart } = useContext(LoginContext);
 
   // const changeImage = () => {
   //   setCurrCarouselImg(prevImg => (prevImg + 1) % 3);
@@ -26,9 +27,12 @@ const Home = () => {
 
   const getHomePageProducts = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/product/${homePageProductCategory}`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${backendUrl}/product/${homePageProductCategory}`,
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
         setHomePageProducts(response.data.products);
         console.log(response.data.products);
@@ -61,10 +65,24 @@ const Home = () => {
           className="z-20 absolute right-2 text-white text-2xl"
         />
       </div>
-      <div className="p-2 font-semibold text-2xl">{homePageProductCategory}</div>
+      <div className="p-2 font-semibold text-2xl">
+        {homePageProductCategory}
+      </div>
       <div className="flex flex-wrap gap-2 p-2 justify-center">
         {homePageProducts?.map((item, i) => {
-          return <ProductUserCard key={i} productTitle={item.productTitle} productDescription={item.productDescription} productImg={item.productImg} productPrice={item.productPrice} />
+          return (
+            <ProductUserCard
+              _id={item._id}
+              productId={item.productId}
+              cart={cart}
+              setCart={setCart}
+              key={i}
+              productTitle={item.productTitle}
+              productDescription={item.productDescription}
+              productImg={item.productImg}
+              productPrice={item.productPrice}
+            />
+          );
         })}
       </div>
     </>

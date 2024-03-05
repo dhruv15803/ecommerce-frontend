@@ -9,8 +9,11 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginErrorMsg,setLoginErrorMsg] = useState("");
+
   const navigate = useNavigate();
   const {isLoggedIn,setIsLoggedIn,setLoggedInUser,setIsUserAdmin} = useContext(LoginContext);
+
 
 
   const loginFormSubmit = async (e) => {
@@ -33,6 +36,10 @@ const Login = () => {
         navigate('/');
       }
     } catch (error) {
+      setLoginErrorMsg("Enter correct username and password");
+      setTimeout(()=>{
+        setLoginErrorMsg("");
+      },3000)
       console.log('login error',error);
     }
   };
@@ -59,6 +66,9 @@ const Login = () => {
             id="password"
             placeholder="Enter password"
           />
+          <div className="flex justify-center my-2 text-red-500">
+            {loginErrorMsg}
+          </div>
           <div className="flex justify-center my-2">
             Don't have an account ?<Link to='/register' className="mx-1 text-blue-500">Click here</Link>
           </div>

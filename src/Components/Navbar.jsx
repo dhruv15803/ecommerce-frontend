@@ -56,7 +56,7 @@ const Navbar = ({cart,categories}) => {
         )}
         {isLoggedIn && <div className="text-xl flex items-center gap-1">
           <Link to='/Cart'><FaShoppingCart onClick={()=>setIsShowHamburger(false)}/></Link>
-          <div className="bg-red-500 text-white rounded-full text-sm px-2 relative right-2 bottom-2">{cart.length}</div>
+          <Link to='/Cart'><div className="bg-red-500 text-white rounded-full text-sm px-2 relative right-2 bottom-2">{cart.length}</div></Link>
           </div>}
 
         {isLoggedIn && (
