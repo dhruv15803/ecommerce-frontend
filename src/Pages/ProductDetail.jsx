@@ -33,6 +33,30 @@ const ProductDetail = () => {
 
   const addToCartForDetailProductPage = async () => {
 try {
+    const cartItem = cart.find(item=>item.cartProductId===id);
+    if(cartItem){
+      const newCart = cart.map((item,i)=>{
+          if(item.cartProductId===_id){
+              return {
+                  ...item,
+                  "cartItemQty":item.cartItemQty+1,
+              }
+          } else{
+              return item;
+          }
+      })
+      setCart(newCart);
+    }
+      else {
+        setCart(prevCart => [...prevCart , {
+            cartItemTitle:product.productTitle,
+            cartItemImg: product.productImg,
+            cartItemDescription: product.productDescription,
+            cartItemPrice: product.productPrice,
+            cartProductId: id,
+            cartUser:loggedInUser._id, 
+        }]) 
+      }   
         const response = await axios.post(`${backendUrl}/cart/add`,{
             cartItemTitle: product.productTitle,
             cartItemDescription: product.productDescription,
@@ -42,16 +66,6 @@ try {
             cartItemImg: product.productImg,
         }, {withCredentials:true})
         console.log(response);
-        if(response.status===200){
-            setCart(prevCart => [...prevCart , {
-                cartItemTitle:product.productTitle,
-                cartItemImg: product.productImg,
-                cartItemDescription: product.productDescription,
-                cartItemPrice: product.productPrice,
-                cartProductId: id,
-                cartUser:loggedInUser._id, 
-            }]) 
-        } 
 } catch (error) {
     console.log(error);
 }
