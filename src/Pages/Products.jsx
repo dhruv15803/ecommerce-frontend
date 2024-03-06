@@ -3,6 +3,8 @@ import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { LoginContext, backendUrl } from "../App";
 import ProductUserCard from "../Components/ProductUserCard";
+import { Link } from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 
 const Products = () => {
   const { category} = useParams();
@@ -10,6 +12,7 @@ const Products = () => {
   const [subCategories,setSubCategories] = useState([]);
   const { cart, setCart } = useContext(LoginContext);
   const [subCategory,setSubCategory] = useState("");
+  const navigate = useNavigate();
 
   const getProductsByCategory = async () => {
     try {
@@ -72,22 +75,23 @@ const Products = () => {
           }
         }).map((item, i) => {
           return (
-            <ProductUserCard
-              _id={item._id}
-              productId={item.productId}
-              cart={cart}
-              setCart={setCart}
-              productDescription={item.productDescription}
-              key={i}
-              productImg={item.productImg}
-              productTitle={item.productTitle}
-              productPrice={item.productPrice}
-            />
+              <ProductUserCard
+                  _id={item._id}
+                  productId={item.productId}
+                  cart={cart}
+                  setCart={setCart}
+                  productDescription={item.productDescription}
+                  key={i}
+                  productImg={item.productImg}
+                  productTitle={item.productTitle}
+                  productPrice={item.productPrice}
+              />
           );
         })}
       </div>
     </>
   );
 };
+
 
 export default Products;

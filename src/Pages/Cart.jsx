@@ -142,6 +142,7 @@ const Cart = () => {
                 cartItemPrice={item.cartItemPrice}
                 cartItemQty={item.cartItemQty}
                 cartProductId={item.cartProductId}
+                cartItemImg={item.cartItemImg}
                 cartUser={item.cartUser}
                 incrementQty={incrementQty}
                 decrementQty={decrementQty}

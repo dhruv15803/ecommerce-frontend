@@ -12,6 +12,7 @@ const ProductCard = (props) => {
         <div className='flex items-center'>
             <div className='font-semibold text-xl w-[90%] flex flex-wrap'>{props.productTitle}</div>
             {!isShowDescription ? <IoIosArrowDown onClick={()=>setIsShowDescription(true)}/> : <IoIosArrowUp onClick={()=>setIsShowDescription(false)}/>}
+            
         </div>
         {isShowDescription && <p className='text-md'>{props.productDescription}</p>}
         <p>Rs {props.productPrice}</p>

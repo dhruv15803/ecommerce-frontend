@@ -3,10 +3,12 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import axios from "axios";
 import { LoginContext, backendUrl } from "../App";
+import { useNavigate } from "react-router-dom";
 
 const ProductUserCard = (props) => {
   const [isShowDescription, setIsShowDescription] = useState(false);
   const {isLoggedIn,loggedInUser} = useContext(LoginContext);
+  const navigate = useNavigate();
 
   const addToCart = async (_id) => {
     try { 
@@ -33,6 +35,7 @@ const ProductUserCard = (props) => {
               cartItemQty: 1,
               cartProductId: _id,
               cartUser:loggedInUser._id,
+              cartItemImg: props.productImg,
             },
           ]);
       }
@@ -44,6 +47,7 @@ const ProductUserCard = (props) => {
           cartItemPrice: props.productPrice,
           cartItemQty: 1,
           cartProductId: _id,
+          cartItemImg: props.productImg,
         },
         { withCredentials: true }
       );
@@ -56,7 +60,7 @@ const ProductUserCard = (props) => {
   return (
     <>
       <div className="flex flex-col p-2 items-center border-2 rounded-xl shadow-xl w-[45%]">
-        <img className="w-full" src={props.productImg} alt="" />
+        <img onClick={() => navigate(props._id)} className="w-full" src={props.productImg} alt="" />
         <div className="flex items-center my-2 text-xl font-bold">
           <div className="flex flex-wrap">{props.productTitle}</div>
           <button

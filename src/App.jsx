@@ -15,6 +15,7 @@ import AdminCategory from "./Pages/AdminCategory";
 import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import AdminSubCategory from "./Pages/AdminSubCategory";
+import ProductDetail from "./Pages/ProductDetail";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -101,7 +102,8 @@ function App() {
                 <Route path="subCategory" element={<AdminSubCategory/>}/>
               </Route>
               <Route path="products">
-                <Route path=":category" element={<Products />} />
+                <Route path=":category" element={<Products />}/>
+                <Route path=":category/:id" element={<ProductDetail/>}/>
               </Route>
             </Route>
           </Routes>
