@@ -5,28 +5,15 @@ import { useContext } from "react";
 import axios from "axios";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaShoppingCart } from "react-icons/fa";
-
+import {confirm} from 'react-confirm-box'
+import Dialog from "./Dialog";
 
 const Navbar = ({cart,categories}) => {
   const { isLoggedIn, setIsLoggedIn, setLoggedInUser, loggedInUser,isUserAdmin } = useContext(LoginContext);
-
   const [isShowHamburger,setIsShowHamburger] = useState(false);
-
-  const logoutUser = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/user/logout`, {
-        withCredentials: true,
-      });
-      if (response.data.success) {
-        setIsLoggedIn(false);
-        setLoggedInUser(null);
-        setIsShowHamburger(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const [isAlertOpen,setIsAlertOpen] = useState(false);
+  const [isLogoutConfirm,setIsLogoutConfirm] = useState(false);
+  
   return (
     <>
       <nav className="flex border-2 p-2 items-center justify-between">
@@ -58,10 +45,9 @@ const Navbar = ({cart,categories}) => {
           <Link to='/Cart'><FaShoppingCart onClick={()=>setIsShowHamburger(false)}/></Link>
           <Link to='/Cart'><div className="bg-red-500 text-white rounded-full text-sm px-2 relative right-2 bottom-2">{cart.length}</div></Link>
           </div>}
-
         {isLoggedIn && (
           <div className="flex items-center">
-            <button onClick={logoutUser}>Logout</button>
+            <button onClick={() => setIsAlertOpen(true)}>Logout</button>
           </div>
         )}
         <div className="flex items-center">
@@ -80,6 +66,7 @@ const Navbar = ({cart,categories}) => {
           return <div onClick={()=>setIsShowHamburger(false)} className="border-b-2 p-4" key={i}><NavLink to={`/products/${item.categoryName}`} className={({isActive})=>isActive ? 'text-gray-200':'text-white'}>{item.categoryName}</NavLink></div> 
         })}
       </div>}
+      {isAlertOpen ? <Dialog setIsLoggedIn={setIsLoggedIn} setIsAlertOpen={setIsAlertOpen} setLoggedInUser={setLoggedInUser} setIsShowHamburger={setIsShowHamburger} isLogoutConfirm={isLogoutConfirm} setIsLogoutConfirm={setIsLogoutConfirm}/> : <></>}
     </>
   );
 };

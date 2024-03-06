@@ -63,9 +63,9 @@ try {
 
   return (
     <>
-    <div className="border-2 rounded-lg shadow-lg flex items-center m-4">
-        <div className="w-[50%]">
-            <img src={product.productImg} alt="" />
+    <div className="border-2 rounded-lg shadow-lg flex items-center m-4 p-2">
+        <div className="w-[50%] mx-2">
+            <img className="rounded-lg" src={product.productImg} alt="" />
         </div>
         <div className="flex flex-col">
             <div className="text-2xl font-bold">
