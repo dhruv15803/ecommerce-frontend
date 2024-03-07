@@ -36,7 +36,7 @@ try {
     const cartItem = cart.find(item=>item.cartProductId===id);
     if(cartItem){
       const newCart = cart.map((item,i)=>{
-          if(item.cartProductId===_id){
+          if(item.cartProductId===id){
               return {
                   ...item,
                   "cartItemQty":item.cartItemQty+1,

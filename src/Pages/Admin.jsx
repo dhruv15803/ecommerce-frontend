@@ -19,6 +19,8 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [productFilter,setProductFilter] = useState("");
+
 
   console.log(category);
 
@@ -191,11 +193,30 @@ const Admin = () => {
       );
       if (response.status === 200) {
         setSubCategories(response.data.category.subCategories);
+        setSubCategory(response.data.category.subCategories[0].name);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getProductsByCategory = async () => {
+    if(productFilter==="") {
+      getAllProducts();
+    } else {
+      try {
+        const response = await axios.post(`${backendUrl}/product/getProductsByCategory`,{
+          category:productFilter,
+        },{withCredentials:true});
+        if(response.status===200){
+          setProducts(response.data.products);
+        } 
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
 
   useEffect(() => {
     getAllCategories();
@@ -206,9 +227,9 @@ const Admin = () => {
     getSubCategory();
   }, [category]);
 
-  console.log(subCategory);
-
-  console.log(products);
+  useEffect(() => {
+    getProductsByCategory();
+  },[productFilter])
 
   if (isLoading) {
     return (
@@ -309,6 +330,7 @@ const Admin = () => {
         </form>
       </div>
       {products.length !== 0 && (
+        <>
         <div className="mx-4 flex gap-4 my-4">
           <button
             onClick={clearProducts}
@@ -317,6 +339,14 @@ const Admin = () => {
             Clear products
           </button>
         </div>
+        <div className="m-2 flex flex-wrap gap-2">
+          <button onClick={() => setProductFilter("")} className={productFilter==="" ? "underline underline-offset-2": "*:"}>All</button>
+          {categories.map((item,i)=>{
+            return <button onClick={() => setProductFilter(item.categoryName)} className={productFilter===item.categoryName ? 'underline underline-offset-2':""}>{item.categoryName}</button>
+          })}
+        </div>
+        </>
+        
       )}
       {products.length !== 0 && (
         <div className="flex p-2 flex-wrap gap-2 border-2 justify-center">
